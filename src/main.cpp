@@ -19,7 +19,7 @@ int main(int argc, char **argv)
 */
 int main(int argc, char **argv)
 {
-    Game game(800,608);
+    Game game(800,640);
     while(game.launched != false)
     {
         game.Event();

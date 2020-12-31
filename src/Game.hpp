@@ -30,7 +30,7 @@ public:
     SDL_Color activeColor= {0,0,255,255};
     //640 en w et 640 en h
     int NombreBlockMax = 20;
-    std::vector<int> v = {-32,0,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512,544,576,608};
+    std::vector<int> v = {-32,0,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512,544,576,608,640};
     bool pressedLeftCLick = false;
     bool pressedRightClick = false;
     int counter = 0;
@@ -55,12 +55,12 @@ Game::Game(int largeur,int hauteur)
     }
     SDL_CreateWindowAndRenderer(largeur,hauteur,0,&window,&renderer);
 
-    ListButton.push_back(Button(644,25,125,35,0,0,0,255)); //Noir
+    ListButton.push_back(Button(680,25,100,35,0,0,0,255)); //Noir
     //ListButton.push_back(Button(644,100,125,35,255,255,255,255)); //Blanc
-    ListButton.push_back(Button(644,125,125,35,255,0,0,255)); //rouge
-    ListButton.push_back(Button(644,225,125,35,0,255,0,255)); //vert
-    ListButton.push_back(Button(644,325,125,35,0,0,255,255)); //bleu
-    ListButton.push_back(Button(644,425,125,35,255,255,0,255)); //jaune
+    ListButton.push_back(Button(680,125,100,35,255,0,0,255)); //rouge
+    ListButton.push_back(Button(680,225,100,35,0,255,0,255)); //vert
+    ListButton.push_back(Button(680,325,100,35,0,0,255,255)); //bleu
+    ListButton.push_back(Button(680,425,100,35,255,255,0,255)); //jaune
 
     //InitMap();
 }
@@ -106,10 +106,6 @@ Game::Event()
             {
                 std::cout << "Oui" << std::endl;
             }
-            if (event.key.keysym.sym == SDLK_m)
-            {
-                SetColorBlock(255,0,0);
-            }
         }
     }
 }
@@ -118,7 +114,7 @@ Game::Update()
 {
     if(pressedLeftCLick==true)
     {
-        if(FindClose(mouseX) != 608)
+        if(FindClose(mouseX) != 640)
         {
             ListBlock.push_back(Block(FindClose(mouseX),FindClose(mouseY),activeColor.r,activeColor.g,activeColor.b,activeColor.a));
         }
@@ -159,7 +155,7 @@ Game::InitMap()
     {
         for(int j=0;j<NombreBlockMax;j++)
         {
-            if(i==0 or j==0 or j==19 or i == 19)
+            if(i==0 or j==0 or j==20 or i == 20)
             {
                 ListBlock.push_back(Block(i*32,j*32,activeColor.r,activeColor.g,activeColor.b,activeColor.a));
             }
@@ -182,11 +178,11 @@ Game::Render(int r,int g,int b)
 
     for(int i=1;i<NombreBlockMax+1;i++)
     {
-        SDL_RenderDrawLine(renderer,-10,i*32,608,i*32);
+        SDL_RenderDrawLine(renderer,-10,i*32,640,i*32);
     }
-    for(int i=1;i<NombreBlockMax;i++)
+    for(int i=1;i<NombreBlockMax+1;i++)
     {
-        SDL_RenderDrawLine(renderer,i*32,-10,i*32,608);
+        SDL_RenderDrawLine(renderer,i*32,-10,i*32,640);
     }
 
     for(auto& it : ListButton)
