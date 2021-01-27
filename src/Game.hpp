@@ -3,6 +3,7 @@
 #include <vector>
 #include "Block.hpp"
 #include "Button.hpp"
+#include <fstream>
 
 
 
@@ -16,12 +17,12 @@ public:
     SDL_Event event;
     bool launched = true;
     Game(int largeur,int hauteur);
-    Render(int r,int g,int b);
-    FindClose(int find);
-    SetColorBlock(Uint8 _r,Uint8 _g,Uint8 _b);
-    InitMap();
-    Event();
-    Update();
+    void Render(int r,int g,int b);
+    int FindClose(int find);
+    void SetColorBlock(Uint8 _r,Uint8 _g,Uint8 _b);
+    void InitMap();
+    void Event();
+    void Update();
     ~Game();
     int mouseX;
     int mouseY;
@@ -34,7 +35,7 @@ public:
     bool pressedLeftCLick = false;
     bool pressedRightClick = false;
     int counter = 0;
-    
+    std::fstream myfile;
     
     const int FPS = 60;
     const int frameDelay = 1000/FPS;
@@ -65,7 +66,7 @@ Game::Game(int largeur,int hauteur)
     //InitMap();
 }
 
-Game::Event()
+void Game::Event()
 {
     while(SDL_PollEvent(&event))
     {
@@ -104,13 +105,21 @@ Game::Event()
         {
             if (event.key.keysym.sym == SDLK_SPACE)
             {
-                std::cout << "Oui" << std::endl;
+                
+                myfile.open("src/Map.level");
+                myfile.clear();
+                for(auto &it : ListBlock)
+                {
+                    myfile << it._Rect.x << "|" << it._Rect.y << "\n";
+                }
+                myfile.close();
+                
             }
         }
     }
 }
 
-Game::Update()
+void Game::Update()
 {
     if(pressedLeftCLick==true)
     {
@@ -144,18 +153,18 @@ Game::Update()
 }
 
 
-Game::SetColorBlock(Uint8 _r,Uint8 _g,Uint8 _b)
+void Game::SetColorBlock(Uint8 _r,Uint8 _g,Uint8 _b)
 {
     activeColor = {_r,_g,_b,activeColor.a};
 }
 
-Game::InitMap()
+void Game::InitMap()
 {
     for(int i=0;i<NombreBlockMax;i++)
     {
         for(int j=0;j<NombreBlockMax;j++)
         {
-            if(i==0 or j==0 or j==20 or i == 20)
+            if(i==0 || j==0 || j==20 || i == 20)
             {
                 ListBlock.push_back(Block(i*32,j*32,activeColor.r,activeColor.g,activeColor.b,activeColor.a));
             }
@@ -163,7 +172,7 @@ Game::InitMap()
     }
 }
 
-Game::Render(int r,int g,int b)
+void Game::Render(int r,int g,int b)
 {
     frameStart = SDL_GetTicks();
     
@@ -199,7 +208,7 @@ Game::Render(int r,int g,int b)
         SDL_Delay(frameDelay-frameTime);
     }
 }
-Game::FindClose(int find)
+int Game::FindClose(int find)
 {
     int best;
     int counter = 0;
