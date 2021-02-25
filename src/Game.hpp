@@ -35,7 +35,7 @@ public:
     bool pressedLeftCLick = false;
     bool pressedRightClick = false;
     int counter = 0;
-    std::fstream myfile;
+    std::ofstream myfile;
     
     const int FPS = 60;
     const int frameDelay = 1000/FPS;
@@ -106,11 +106,11 @@ void Game::Event()
             if (event.key.keysym.sym == SDLK_SPACE)
             {
                 
-                myfile.open("src/Map.level");
-                myfile.clear();
+                myfile.open("src/Map.level",std::ios::out);
+                
                 for(auto &it : ListBlock)
                 {
-                    myfile << it._Rect.x << "|" << it._Rect.y << "\n";
+                    myfile << it._Rect.x << ":" << it._Rect.y << std::endl;
                 }
                 myfile.close();
                 
