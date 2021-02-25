@@ -110,7 +110,7 @@ void Game::Event()
                 
                 for(auto &it : ListBlock)
                 {
-                    myfile << it._Rect.x << ":" << it._Rect.y << ":"<< it._Color.r <<it._Color.g<<it._Color.b << std::endl;
+                    myfile << it._Rect.x << ":" << it._Rect.y << ":"<< it._Color.r << ":"<<it._Color.g<< ":"<<it._Color.b << std::endl;
                 }
                 myfile.close();
                 
