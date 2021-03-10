@@ -10,13 +10,16 @@
 class Game
 {
 public:
+    Game(int largeur,int hauteur);
     int _Largeur;
     int _Hauteur;
-    SDL_Window *window = nullptr;
-    SDL_Renderer *renderer = nullptr;
-    SDL_Event event;
+    int mouseX;
+    int mouseY;
+    int NombreBlockMax = 20;
     bool launched = true;
-    Game(int largeur,int hauteur);
+    bool pressedLeftCLick = false;
+    bool pressedRightClick = false;
+    SDL_Color activeColor= {0,0,255,255};
     void Render(int r,int g,int b);
     int FindClose(int find);
     void SetColorBlock(Uint8 _r,Uint8 _g,Uint8 _b);
@@ -24,25 +27,20 @@ public:
     void Event();
     void Update();
     ~Game();
-    int mouseX;
-    int mouseY;
-    std::vector<Block> ListBlock;
-    std::vector<Button> ListButton;
-    SDL_Color activeColor= {0,0,255,255};
-    //640 en w et 640 en h
-    int NombreBlockMax = 20;
-    std::vector<int> v = {-32,0,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512,544,576,608,640};
-    bool pressedLeftCLick = false;
-    bool pressedRightClick = false;
+private:
     int counter = 0;
-    std::ofstream myfile;
-    
+    int frameTime;
     const int FPS = 60;
     const int frameDelay = 1000/FPS;
-
     Uint32 frameStart;
-    int frameTime;
-    
+    SDL_Window *window = nullptr;
+    SDL_Renderer *renderer = nullptr;
+    SDL_Event event;
+    std::ofstream myfile;
+    std::vector<int> v = {-32,0,32,64,96,128,160,192,224,256,288,320,352,384,416,448,480,512,544,576,608,640};
+    std::vector<Block> ListBlock;
+    std::vector<Button> ListButton;
+
 };
 
 Game::Game(int largeur,int hauteur)
@@ -54,7 +52,14 @@ Game::Game(int largeur,int hauteur)
     {
         exit(EXIT_FAILURE);
     }
-    SDL_CreateWindowAndRenderer(largeur,hauteur,0,&window,&renderer);
+    if (SDL_CreateWindowAndRenderer(largeur,hauteur,0,&window,&renderer)==-1)
+    {
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        exit(EXIT_FAILURE);
+        
+    }
 
     ListButton.push_back(Button(680,25,100,35,0,0,0,255)); //Noir
     //ListButton.push_back(Button(644,100,125,35,255,255,255,255)); //Blanc
@@ -118,7 +123,6 @@ void Game::Event()
         }
     }
 }
-
 void Game::Update()
 {
     if(pressedLeftCLick==true)
@@ -171,7 +175,6 @@ void Game::InitMap()
         }
     }
 }
-
 void Game::Render(int r,int g,int b)
 {
     frameStart = SDL_GetTicks();
@@ -229,7 +232,6 @@ int Game::FindClose(int find)
                 best = counter;
             }
         }
-        
         counter +=1;
     }
     return v[best];

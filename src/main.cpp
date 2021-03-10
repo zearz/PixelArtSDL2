@@ -2,7 +2,7 @@
 #include "Game.hpp"
 
 /*
-//g++ src/main.cpp -o bin/prog -I include -L lib -lmingw32 -lSDL2main -lSDL2
+//g++ src/main.cpp -o bin/prog -I include -L lib -lmingw32 -lSDL2main -lSDL2 -static-libgcc -static-libstdc++
 int main(int argc, char **argv)
 {
     Game game(608,608);
